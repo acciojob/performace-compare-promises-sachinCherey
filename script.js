@@ -13,3 +13,31 @@ const apiUrls = [
 ];
 
 // You can write your code here
+
+function fetchData(url) {
+            return fetch(url)
+                .then(response => response.json())
+                .catch(error => {
+                    console.error(`Error fetching data from ${url}: ${error}`);
+                });
+        }
+
+        function performAPICalls() {
+            const startAll = performance.now();
+            Promise.all(apiUrls.map(fetchData))
+                .then(() => {
+                    const endAll = performance.now();
+                    const timeTakenAll = endAll - startAll;
+                    document.getElementById('output-all').textContent = timeTakenAll.toFixed(2) + ' ms';
+                });
+
+            const startAny = performance.now();
+            Promise.any(apiUrls.map(fetchData))
+                .then(() => {
+                    const endAny = performance.now();
+                    const timeTakenAny = endAny - startAny;
+                    document.getElementById('output-any').textContent = timeTakenAny.toFixed(2) + ' ms';
+                });
+        }
+
+        performAPICalls();
